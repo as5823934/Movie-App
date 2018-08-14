@@ -199,7 +199,6 @@ export default class App extends React.Component {
           data={this.state.dataSource}
           renderItem={this.renderItem}
           keyExtractor={(item, index) => index.toString()}
-          ListFooterComponent={this.renderBottomTab()}
           style={{ backgroundColor: 'black' }}
         />
       )
