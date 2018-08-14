@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, FlatList, TextInput, ActivityIndicator, Text, View, TouchableOpacity, Image  } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import { Constants } from 'expo';
-import API_KEYS from './config_keys'
+import API_KEYS from "./config_keys"
 
 const API_KEY = API_KEYS;
 export default class App extends React.Component {
@@ -239,7 +239,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#000', 
+    backgroundColor: 'darkgray', 
     flexDirection: 'column', 
     paddingTop: Constants.statusBarHeight
   },
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   topStyle: {
     padding: 20, 
     alignItems: 'center', 
-    backgroundColor: 'black', 
+    backgroundColor: 'gray', 
     marginBottom: 3
   },
   bottomTabStyle: {
