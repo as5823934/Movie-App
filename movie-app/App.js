@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, FlatList, TextInput, ActivityIndicator, Text, View, TouchableOpacity, Image  } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import { Constants } from 'expo';
+import API_KEYS from './config_keys'
+
+const API_KEY = API_KEYS;
 export default class App extends React.Component {
   constructor(props){
     super(props);
@@ -20,7 +23,7 @@ export default class App extends React.Component {
 
   fetchData = async() => {
     const option = this.state.option
-    await fetch(`https://api.themoviedb.org/3/movie/${option}?api_key=97b14acad53b20d73f2eda02d46da480&language=en-US&page=1`)
+    await fetch(`https://api.themoviedb.org/3/movie/${option}?api_key=${API_KEY}&language=en-US&page=1`)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
@@ -35,18 +38,21 @@ export default class App extends React.Component {
 
   changePopularOption = () => {
     this.setState({
+      isLoading: true,
       option: 'popular'
     }, ()=> this.fetchData())
   }
 
   changeNowPlayingOption = () => {
     this.setState({
+      isLoading: true,
       option: 'now_playing'
     }, () => this.fetchData())
   }
 
   changeTopRatedOption = () => {
     this.setState({
+      isLoading: true,
       option: 'top_rated'
     }, () => this.fetchData())
   }
@@ -191,6 +197,13 @@ export default class App extends React.Component {
   }
 
   renderList = () => {
+    if (this.state.isLoading) {
+      return (
+        <View style={{ flex: 1, padding: 20 }}>
+          <ActivityIndicator />
+        </View>
+      )
+    }
     if (this.state.searchKeyword.trim() === '') {
       return (
         <FlatList
@@ -212,14 +225,6 @@ export default class App extends React.Component {
   }
 
   render(){
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
-    
     return(  
       <View style={styles.container}>
       {this.renderTop()}
