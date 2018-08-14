@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, FlatList, TextInput, ActivityIndicator, Text, View, TouchableOpacity, Image  } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import { Constants } from 'expo';
-import API_KEYS from "./config_keys"
+import API_KEYS from "./config_keys";
 
 const API_KEY = API_KEYS;
 export default class App extends React.Component {
