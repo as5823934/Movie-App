@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, FlatList, TextInput, ActivityIndicator, Text, View, TouchableOpacity, Image  } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
-
+import { Constants } from 'expo';
 export default class App extends React.Component {
   constructor(props){
     super(props);
@@ -10,42 +10,72 @@ export default class App extends React.Component {
       dataSource: [],
       listToDisplay: [],
       searchKeyword: '',
-      option: 'now_playing'
+      option: 'now_playing',
     }
   }
 
   componentDidMount(){
+    this.fetchData()
+  }
+
+  fetchData = async() => {
     const option = this.state.option
-    return fetch(`https://api.themoviedb.org/3/movie/${option}?api_key=97b14acad53b20d73f2eda02d46da480&language=en-US&page=1`)
+    await fetch(`https://api.themoviedb.org/3/movie/${option}?api_key=97b14acad53b20d73f2eda02d46da480&language=en-US&page=1`)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
           isLoading: false,
           dataSource: responseJson.results,
-        }, function(){
-  
-        });
-
+        })
       })
-      .catch((error) =>{
+      .catch((error) => {
         console.error(error);
       });
   }
 
-  // changeOption = () => {
-  //   this.setState({
-  //     option: 'popular'
-  //   })
-  // }
+  changePopularOption = () => {
+    this.setState({
+      option: 'popular'
+    }, ()=> this.fetchData())
+  }
+
+  changeNowPlayingOption = () => {
+    this.setState({
+      option: 'now_playing'
+    }, () => this.fetchData())
+  }
+
+  changeTopRatedOption = () => {
+    this.setState({
+      option: 'top_rated'
+    }, () => this.fetchData())
+  }
 
   renderTop() {
     return(
-      <View style={{padding: 20, alignItems: 'center' , backgroundColor: 'yellow', marginBottom: 6}}>
-        <Text style={{fontSize: 30}}>
-          Movie App
+      <View style={{padding: 20, alignItems: 'center' , backgroundColor: 'black', marginBottom: 3}}>
+        <Text style={{fontSize: 30, color: 'white'}}>
+          Movie
         </Text>
-        <Button title={'change'} onPress={()=> this.changeOption}/>
+        
       </View>
+    );
+  }
+
+  renderBottomTab = () =>{
+    console.log('footer');
+    return(
+    <View style={{flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', backgroundColor: 'lightgray', padding: 2, height: 50}}>
+        <TouchableOpacity onPress={() => this.changePopularOption()}>
+          <Icon name='fire' type='font-awesome' size={30} />
+      </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.changeNowPlayingOption()}>
+        <Icon name='film' type='font-awesome' size={30} />
+      </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.changeTopRatedOption()}>
+        <Icon name='star' type='font-awesome' size={30} />
+      </TouchableOpacity>
+    </View>
     );
   }
 
@@ -106,6 +136,7 @@ export default class App extends React.Component {
     );
 
     this.setState({ listToDisplay: tempArr });
+    console.log(this.state.listToDisplay)
   }
 
   isSearched = (target, keyword) => {
@@ -153,6 +184,7 @@ export default class App extends React.Component {
           }
           }
           returnKeyType='search'
+          underlineColorAndroid={'transparent'}
         />
 
         {this.state.searchKeyword.trim() === '' ? this._returnSearchIcon() : this._returnCloseIcon()}
@@ -167,6 +199,8 @@ export default class App extends React.Component {
           data={this.state.dataSource}
           renderItem={this.renderItem}
           keyExtractor={(item, index) => index.toString()}
+          ListFooterComponent={this.renderBottomTab()}
+          style={{ backgroundColor: 'black' }}
         />
       )
     } else {
@@ -188,17 +222,13 @@ export default class App extends React.Component {
         </View>
       )
     }
-    console.log(this.state.listToDisplay)
+    
     return(  
-      <View style={{flex: 1, backgroundColor: '#000', flexDirection: 'column'}}>
+      <View style={{flex: 1, backgroundColor: '#000', flexDirection: 'column', paddingTop: Constants.statusBarHeight}}>
       {this.renderTop()}
       {this.renderSearchBar()}
       {this.renderList()}
-        {/* <FlatList
-          data={this.state.listToDisplay}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        /> */}
+      {this.renderBottomTab()}
       </View>
     );
   }
