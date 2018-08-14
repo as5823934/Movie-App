@@ -53,7 +53,7 @@ export default class App extends React.Component {
 
   renderTop() {
     return(
-      <View style={{padding: 20, alignItems: 'center' , backgroundColor: 'black', marginBottom: 3}}>
+      <View style={styles.topStyle}>
         <Text style={{fontSize: 30, color: 'white'}}>
           Movie
         </Text>
@@ -63,19 +63,18 @@ export default class App extends React.Component {
   }
 
   renderBottomTab = () =>{
-    console.log('footer');
     return(
-    <View style={{flexDirection: 'row', justifyContent:'space-around', alignItems: 'center', backgroundColor: 'lightgray', padding: 2, height: 50}}>
+      <View style={styles.bottomTabStyle}>
         <TouchableOpacity onPress={() => this.changePopularOption()}>
           <Icon name='fire' type='font-awesome' size={30} />
-      </TouchableOpacity>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => this.changeNowPlayingOption()}>
-        <Icon name='film' type='font-awesome' size={30} />
-      </TouchableOpacity>
+          <Icon name='film' type='font-awesome' size={30} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => this.changeTopRatedOption()}>
-        <Icon name='star' type='font-awesome' size={30} />
-      </TouchableOpacity>
-    </View>
+          <Icon name='star' type='font-awesome' size={30} />
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -181,8 +180,7 @@ export default class App extends React.Component {
             this.autoSearch(value);
             this.setState({ searchKeyword: value });
             console.log(value);
-          }
-          }
+          }}
           returnKeyType='search'
           underlineColorAndroid={'transparent'}
         />
@@ -193,7 +191,7 @@ export default class App extends React.Component {
   }
 
   renderList = () => {
-    if (this.state.searchKeyword === '') {
+    if (this.state.searchKeyword.trim() === '') {
       return (
         <FlatList
           data={this.state.dataSource}
@@ -223,7 +221,7 @@ export default class App extends React.Component {
     }
     
     return(  
-      <View style={{flex: 1, backgroundColor: '#000', flexDirection: 'column', paddingTop: Constants.statusBarHeight}}>
+      <View style={styles.container}>
       {this.renderTop()}
       {this.renderSearchBar()}
       {this.renderList()}
@@ -235,10 +233,10 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1, 
+    backgroundColor: '#000', 
+    flexDirection: 'column', 
+    paddingTop: Constants.statusBarHeight
   },
   searchBarStyle: {
     paddingTop: 10,
@@ -250,4 +248,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white'
   },
+  topStyle: {
+    padding: 20, 
+    alignItems: 'center', 
+    backgroundColor: 'black', 
+    marginBottom: 3
+  },
+  bottomTabStyle: {
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    alignItems: 'center', 
+    backgroundColor: 'lightgray', 
+    padding: 2, 
+    height: 50
+  }
 });
