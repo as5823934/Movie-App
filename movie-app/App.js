@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, FlatList, TextInput, ActivityIndicator, Text, View, TouchableOpacity, Image  } from 'react-native';
+import { StyleSheet, FlatList, TextInput, ActivityIndicator, Text, View, TouchableOpacity, Image, Platform  } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import { Constants } from 'expo';
 import API_KEYS from "./config_keys";
@@ -60,7 +60,7 @@ export default class App extends React.Component {
   renderTop() {
     return(
       <View style={styles.topStyle}>
-        <Text style={{fontSize: 30, color: 'white'}}>
+        <Text style={{fontSize: 30, color: 'black'}}>
           Movie
         </Text>
         
@@ -126,7 +126,7 @@ export default class App extends React.Component {
     if(this.state.searchKeyword === '') {
       return;
     }
-    const tempArr = this.state.entireUserList.filter(x =>
+    const tempArr = this.state.dataSource.filter(x =>
       this.isSearched(x.title.toLowerCase(), this.state.searchKeyword)
     );
 
@@ -151,18 +151,23 @@ export default class App extends React.Component {
     return false;
   }
 
-  _deleteSearchText = () => {
+  deleteSearchText = () => {
     this.setState({ searchKeyword: '' });
-    this._textInput.setNativeProps({ text: '' });
+    if (Platform.OS === 'ios') {
+      this._textInput.setNativeProps({ text: ' ' });
+    }
+    setTimeout(() => {
+      this._textInput.setNativeProps({ text: '' });
+    });
   }
 
-  _returnCloseIcon = () => (
-    <TouchableOpacity onPress={() => this._deleteSearchText()} flex={2} paddingRight={10}>
+  returnCloseIcon = () => (
+    <TouchableOpacity onPress={() => this.deleteSearchText()} flex={2} paddingRight={10}>
       <Icon name='close' marginRight={10} />
     </TouchableOpacity>
   )
 
-  _returnSearchIcon = () => {
+  returnSearchIcon = () => {
     console.log('there is no search texts');
     return (
       <TouchableOpacity onPress={() => this.onPress()} flex={2} paddingRight={10}>
@@ -191,7 +196,7 @@ export default class App extends React.Component {
           underlineColorAndroid={'transparent'}
         />
 
-        {this.state.searchKeyword.trim() === '' ? this._returnSearchIcon() : this._returnCloseIcon()}
+        {this.state.searchKeyword.trim() === '' ? this.returnSearchIcon() : this.returnCloseIcon()}
       </View>
     );
   }
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
   topStyle: {
     padding: 20, 
     alignItems: 'center', 
-    backgroundColor: 'gray', 
+    backgroundColor: 'lightgray', 
     marginBottom: 3
   },
   bottomTabStyle: {
