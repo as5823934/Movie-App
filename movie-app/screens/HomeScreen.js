@@ -76,13 +76,13 @@ export default class HomeScreen extends React.Component {
         return (
             <View style={styles.bottomTabStyle}>
                 <TouchableOpacity onPress={() => this.changePopularOption()}>
-                    <Icon name='fire' type='font-awesome' size={30} />
+                    <Icon name='fire' type='font-awesome' size={30} color={this.state.option === 'popular' ? 'tomato':'gray'}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.changeNowPlayingOption()}>
-                    <Icon name='film' type='font-awesome' size={30} />
+                    <Icon name='film' type='font-awesome' size={30} color={this.state.option === 'now_playing' ? 'tomato' : 'gray'}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.changeTopRatedOption()}>
-                    <Icon name='star' type='font-awesome' size={30} />
+                    <Icon name='star' type='font-awesome' size={30} color={this.state.option === 'top_rated' ? 'tomato' : 'gray'}/>
                 </TouchableOpacity>
             </View>
         );
