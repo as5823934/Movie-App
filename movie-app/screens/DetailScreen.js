@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
-import API_KEYS from "../config_keys";
-
-
+import { fetchDetailMovie, IMAGE_URL } from "../config_keys";
 export default class DetailScreen extends React.Component {
     constructor(props){
         super(props);
@@ -10,8 +8,7 @@ export default class DetailScreen extends React.Component {
             isLoading: true,
             id: this.props.navigation.getParam('data'),
             dataSource: []
-        }
-        
+        }   
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -19,22 +16,15 @@ export default class DetailScreen extends React.Component {
     });
 
     componentDidMount() {
-        this.fetchData()
+        this.getDetailMovie(this.state.id)
     }
 
-    fetchData = async () => {
-        const id = this.state.id
-        await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEYS}&language=en-US`)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({
-                    isLoading: false,
-                    dataSource: responseJson,
-                })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+    getDetailMovie = async (id) => {
+        const data = await fetchDetailMovie(id);
+        this.setState({
+            isLoading: false,
+            dataSource: data
+        })
     }
     
     renderContent = () => {
@@ -62,26 +52,26 @@ export default class DetailScreen extends React.Component {
                     <View style={{ flex: 1, flexDirection: 'row', paddingVertical: 4, marginBottom: 1 }}>
                         <Image
                             style={{ width: 150, height: 230 }}
-                            source={{ uri: 'https://image.tmdb.org/t/p/w500' + data.poster_path }}
+                            source={{ uri: IMAGE_URL + data.image_url }}
                         />
                         <View style={{ flex: 1, flexDirection: 'column', paddingLeft: 8 }}>
-                            <Text style={{ fontSize: 18, padding: 3, fontWeight: 'bold' }}>
+                            <Text style={{ fontSize: 20, padding: 3, fontWeight: 'bold' }}>
                                 Title: {data.title}
                             </Text>
-                            <Text style={{ fontSize: 16, padding: 3 }}>
-                                Date: {data.release_date}
+                            <Text style={{ fontSize: 18, padding: 3 }}>
+                                Date: {data.releaseDate}
                             </Text>
-                            <Text style={{ fontSize: 16, padding: 3 }}>
-                                Rating: {data.vote_average}
+                            <Text style={{ fontSize: 18, padding: 3 }}>
+                                Rating: {data.rating}
                             </Text>
-                            <Text style={{ fontSize: 16, padding: 3 }}>
+                            <Text style={{ fontSize: 18, padding: 3 }}>
                                 Rating: {data.runtime} mins
                             </Text>
                         </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={{fontSize: 25, fontWeight: 'bold'}}>Overview:</Text>
-                        <Text style={{ fontSize: 16}}>{data.overview}</Text>
+                        <Text style={{ fontSize: 18}}>{data.overview}</Text>
                     </View>
                 </View>
             </View>

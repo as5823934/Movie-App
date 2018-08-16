@@ -2,9 +2,8 @@ import React from 'react';
 import { StyleSheet, FlatList, TextInput, ActivityIndicator, Text, View, TouchableOpacity, Image, Platform } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import { Constants } from 'expo';
-import API_KEYS from "../config_keys";
+import { fetchData, IMAGE_URL } from "../config_keys";
 
-const API_KEY = API_KEYS;
 export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -18,59 +17,41 @@ export default class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchData()
+        this.getData(this.state.option)
     }
 
     static navigationOptions = ({ navigation }) => ({
         title: 'Movie',
     });
 
-    fetchData = async () => {
-        const option = this.state.option
-        await fetch(`https://api.themoviedb.org/3/movie/${option}?api_key=${API_KEY}&language=en-US&page=1`)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({
-                    isLoading: false,
-                    dataSource: responseJson.results,
-                })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+    getData = async (option) => {
+        const data = await fetchData(option);
+        this.setState({
+            isLoading: false,
+            dataSource: data
+        })
     }
 
     changePopularOption = () => {
         this.setState({
             isLoading: true,
             option: 'popular'
-        }, () => this.fetchData())
+        }, () => this.getData(this.state.option))
     }
 
     changeNowPlayingOption = () => {
         this.setState({
             isLoading: true,
             option: 'now_playing'
-        }, () => this.fetchData())
+        }, () => this.getData(this.state.option))
     }
 
     changeTopRatedOption = () => {
         this.setState({
             isLoading: true,
             option: 'top_rated'
-        }, () => this.fetchData())
+        }, () => this.getData(this.state.option))
     }
-
-    // renderTop() {
-    //     return (
-    //         <View style={styles.topStyle}>
-    //             <Text style={{ fontSize: 30, color: 'black' }}>
-    //                 Movie
-    //     </Text>
-
-    //         </View>
-    //     );
-    // }
 
     renderBottomTab = () => {
         return (
@@ -101,26 +82,26 @@ export default class HomeScreen extends React.Component {
                 <View
                     style={{
                         flex: 1,
-                        paddingVertical: 8,
-                        paddingHorizontal: 12,
+                        paddingVertical: 5,
+                        paddingHorizontal: 5,
                         borderBottomWidth: 0,
                         backgroundColor: '#f5f5f5'
                     }}
                 >
                     <View style={{ flex: 1, flexDirection: 'row', paddingVertical: 4, marginBottom: 1 }}>
                         <Image
-                            style={{ width: 90, height: 130 }}
-                            source={{ uri: 'https://image.tmdb.org/t/p/w500' + item.poster_path }}
+                            style={{ width: 110, height: 160 }}
+                            source={{ uri: IMAGE_URL + item.image_url }}
                         />
-                        <View style={{ flexDirection: 'column', paddingLeft: 8 }}>
+                        <View style={{ flex: 1, flexDirection: 'column', paddingLeft: 8 }}>
                             <Text style={{ fontSize: 17, padding: 2, fontWeight: 'bold' }}>
                                 {item.title}
                             </Text>
                             <Text style={{ fontSize: 15, padding: 2 }}>
-                                Date: {item.release_date}
+                                Date: {item.releaseDate}
                             </Text>
                             <Text style={{ fontSize: 15, padding: 2 }}>
-                                Rating: {item.vote_average}
+                                Rating: {item.rating}
                             </Text>
                         </View>
                     </View>
