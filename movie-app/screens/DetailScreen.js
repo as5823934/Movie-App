@@ -69,7 +69,7 @@ export default class DetailScreen extends React.Component {
                             </Text>
                         </View>
                     </View>
-                    <ScrollView style={{ flex: 1 }}>
+                    <ScrollView style={{ flex: 1, padding: 5 }}>
                         <Text style={{fontSize: 25, fontWeight: 'bold'}}>Overview:</Text>
                         <Text style={{ fontSize: 18}}>{data.overview}</Text>
                     </ScrollView>
