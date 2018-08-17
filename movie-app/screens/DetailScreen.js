@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { fetchDetailMovie, IMAGE_URL } from "../config_keys";
 export default class DetailScreen extends React.Component {
     constructor(props){
@@ -69,10 +69,10 @@ export default class DetailScreen extends React.Component {
                             </Text>
                         </View>
                     </View>
-                    <View style={{ flex: 1 }}>
+                    <ScrollView style={{ flex: 1 }}>
                         <Text style={{fontSize: 25, fontWeight: 'bold'}}>Overview:</Text>
                         <Text style={{ fontSize: 18}}>{data.overview}</Text>
-                    </View>
+                    </ScrollView>
                 </View>
             </View>
         )
